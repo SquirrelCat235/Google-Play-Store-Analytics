@@ -1,0 +1,12 @@
+Classification Report - Linear SVM
+==================================================
+
+              precision    recall  f1-score   support
+
+    Negative     0.7987    0.7970    0.7979       936
+     Neutral     0.7426    0.8093    0.7745       624
+    Positive     0.9145    0.8958    0.9051      2639
+
+    accuracy                         0.8609      4199
+   macro avg     0.8186    0.8340    0.8258      4199
+weighted avg     0.8632    0.8609    0.8618      4199
