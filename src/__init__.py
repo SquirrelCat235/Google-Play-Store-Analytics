@@ -11,6 +11,12 @@ from src.preprocessing import (
     LABEL2ID,
     ID2LABEL,
 )
+from src.eda import (
+    plot_sentiment_distribution,
+    plot_review_length_distribution,
+    plot_wordcloud,
+    plot_top_ngrams,
+)
 
 __all__ = [
     "set_seed",
@@ -24,4 +30,8 @@ __all__ = [
     "get_tfidf_features",
     "LABEL2ID",
     "ID2LABEL",
+    "plot_sentiment_distribution",
+    "plot_review_length_distribution",
+    "plot_wordcloud",
+    "plot_top_ngrams",
 ]

@@ -1,0 +1,16 @@
+# Python bytecode & cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Jupyter & Pytest caches
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Scratch & temporary scripts
+scratch/
