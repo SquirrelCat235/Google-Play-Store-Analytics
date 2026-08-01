@@ -235,6 +235,13 @@ Raw Review Text ──► Text Cleaning ──► Tokenization ──► Sequenc
   - Loss Function: Weighted `CrossEntropyLoss` ($w = [1.50, 2.25, 0.53]$) to address class imbalance.
   - Hardware Acceleration: Fine-tuned on an NVIDIA GeForce RTX 2050 GPU using Automatic Mixed Precision (`BF16`/`FP16`).
 
+### Model Hosting & Deployment
+The fine-tuned DistilBERT model (approx. 267MB) exceeds GitHub's standard 100MB file size limit and is therefore excluded from this Git repository. 
+For deployment, the model is hosted securely on the Hugging Face Model Hub:
+- [Hugging Face Repository: Samayita-23/google-play-distilbert-sentiment](https://huggingface.co/Samayita-23/google-play-distilbert-sentiment)
+
+The Streamlit application is configured to prioritize any local model files. If the local model is not found (e.g., in a cloud deployment environment), it automatically downloads and loads the fine-tuned model directly from Hugging Face at runtime, ensuring a seamless deployment process without requiring Git LFS.
+
 ---
 
 ## Model Comparison

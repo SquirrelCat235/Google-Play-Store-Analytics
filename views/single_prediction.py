@@ -27,20 +27,22 @@ from src.preprocessing import ID2LABEL
 
 
 @st.cache_resource
-def load_distilbert_pipeline(model_dir="outputs/models/distilbert_sentiment"):
-    """Cache and load saved DistilBERT model and tokenizer."""
-    if not os.path.exists(model_dir):
-        return None, None, f"Model checkpoint directory '{model_dir}' not found."
+def load_distilbert_pipeline(local_model_dir="outputs/models/distilbert_sentiment", hf_repo_id="Samayita-23/google-play-distilbert-sentiment"):
+    """
+    Cache and load saved DistilBERT model and tokenizer.
+    Prioritizes local model, falls back to Hugging Face Hub if missing (e.g. in deployment).
+    """
+    model_path = local_model_dir if os.path.exists(local_model_dir) else hf_repo_id
 
     try:
         device = get_device()
-        tokenizer = AutoTokenizer.from_pretrained(model_dir)
-        model = AutoModelForSequenceClassification.from_pretrained(model_dir)
+        tokenizer = AutoTokenizer.from_pretrained(model_path)
+        model = AutoModelForSequenceClassification.from_pretrained(model_path)
         model.to(device)
         model.eval()
         return tokenizer, model, None
     except Exception as e:
-        return None, None, str(e)
+        return None, None, f"Failed to load model from '{model_path}': {str(e)}"
 
 
 def render_single_prediction_page():
