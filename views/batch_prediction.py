@@ -66,11 +66,27 @@ def render_batch_prediction_page():
 
             # Select column containing review text
             possible_cols = [c for c in df.columns if any(k in c.lower() for k in ["review", "text", "comment"])]
-            default_col = possible_cols[0] if possible_cols else df.columns[0]
-            text_column = st.selectbox("Select Column Containing Customer Review Text", df.columns, index=df.columns.get_loc(default_col))
+            default_col = possible_cols[0] if possible_cols else (df.columns[0] if len(df.columns) > 0 else None)
+            
+            if not default_col:
+                st.error("The uploaded CSV file contains no columns. Please upload a valid dataset.")
+                return
+                
+            default_index = list(df.columns).index(default_col) if default_col in df.columns else 0
+            text_column = st.selectbox("Select Column Containing Customer Review Text", df.columns, index=default_index)
 
             if st.button("🚀 Execute Batch Analysis", type="primary", use_container_width=True):
-                texts = df[text_column].astype(str).tolist()
+                if text_column not in df.columns:
+                    st.error(f"Required column '{text_column}' is missing from the dataset.")
+                    return
+
+                # Gracefully handle NaN, empty, and non-string values to guarantee a pure list of strings
+                df[text_column] = df[text_column].fillna("")
+                texts = [str(val).strip() for val in df[text_column].tolist()]
+                
+                if not texts:
+                    st.error("The dataset contains no valid text to analyze.")
+                    return
 
                 st.info(f"Processing {len(texts):,} reviews using DistilBERT model...")
                 progress_bar = st.progress(0)
