@@ -27,12 +27,22 @@ from src.preprocessing import ID2LABEL
 
 
 @st.cache_resource
-def load_distilbert_pipeline(local_model_dir="outputs/models/distilbert_sentiment", hf_repo_id="Samayita-23/google-play-distilbert-sentiment"):
+def load_distilbert_pipeline(hf_repo_id="Samayita-23/google-play-distilbert-sentiment"):
     """
     Cache and load saved DistilBERT model and tokenizer.
     Prioritizes local model, falls back to Hugging Face Hub if missing (e.g. in deployment).
     """
-    model_path = local_model_dir if os.path.exists(local_model_dir) else hf_repo_id
+    # Resolve local model path relative to the project root (not CWD)
+    local_model_dir = os.path.join(str(project_root), "outputs", "models", "distilbert_sentiment")
+
+    # Check if actual model weight files exist locally
+    has_safetensors = os.path.isfile(os.path.join(local_model_dir, "model.safetensors"))
+    has_bin = os.path.isfile(os.path.join(local_model_dir, "pytorch_model.bin"))
+    use_local = has_safetensors or has_bin
+
+    model_path = local_model_dir if use_local else hf_repo_id
+    source_label = "Local Model" if use_local else "Hugging Face Hub"
+    print(f"[Model Loader] Source: {source_label} | Path: {model_path}", flush=True)
 
     try:
         device = get_device()
