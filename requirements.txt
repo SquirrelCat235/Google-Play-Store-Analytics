@@ -8,3 +8,8 @@ torch
 joblib
 wordcloud
 nltk
+streamlit
+plotly
+sqlalchemy
+pymysql
+python-dotenv

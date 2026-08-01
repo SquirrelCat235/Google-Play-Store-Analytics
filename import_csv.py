@@ -5,13 +5,19 @@ import pandas as pd
 import sqlalchemy
 from sqlalchemy import text
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Import Google Play CSV data into MySQL staging tables.")
-    parser.add_argument("--host", default="localhost", help="MySQL database host (default: localhost)")
-    parser.add_argument("--port", type=int, default=3306, help="MySQL database port (default: 3306)")
-    parser.add_argument("--user", default="root", help="MySQL database username (default: root)")
-    parser.add_argument("--password", default="", help="MySQL database password (default: empty)")
-    parser.add_argument("--database", default="Google_Play", help="MySQL database name (default: Google_Play)")
+    parser.add_argument("--host", default=os.getenv("DB_HOST", "localhost"), help="MySQL database host")
+    parser.add_argument("--port", type=int, default=int(os.getenv("DB_PORT", "3306")), help="MySQL database port")
+    parser.add_argument("--user", default=os.getenv("DB_USER", "root"), help="MySQL database username")
+    parser.add_argument("--password", default=os.getenv("DB_PASSWORD", ""), help="MySQL database password")
+    parser.add_argument("--database", default=os.getenv("DB_NAME", "Google_Play"), help="MySQL database name")
     parser.add_argument("--no-truncate", action="store_true", help="Do not truncate staging tables before importing")
     return parser.parse_args()
 
@@ -54,7 +60,7 @@ def main():
         print("2. Check if the database 'Google_Play' exists.", file=sys.stderr)
         print("3. Check username, password, host and port.", file=sys.stderr)
         print("   Example run with custom credentials:", file=sys.stderr)
-        print(f"   python import_csv.py --user your_user --password your_password --port 3306", file=sys.stderr)
+        print(f"   python import_csv.py --user YOUR_MYSQL_USER --password YOUR_MYSQL_PASSWORD --port 3306", file=sys.stderr)
         sys.exit(1)
 
     # 3. Truncate tables if requested

@@ -1,0 +1,12 @@
+Classification Report - DistilBERT
+==================================================
+
+              precision    recall  f1-score   support
+
+    Negative     0.8213    0.9135    0.8649       936
+     Neutral     0.9268    0.8926    0.9094       624
+    Positive     0.9605    0.9307    0.9453      2639
+
+    accuracy                         0.9212      4199
+   macro avg     0.9029    0.9122    0.9066      4199
+weighted avg     0.9245    0.9212    0.9221      4199

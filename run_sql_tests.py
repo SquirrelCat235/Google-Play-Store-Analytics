@@ -8,22 +8,29 @@ Usage:
     python run_sql_tests.py --password YOUR_MYSQL_PASSWORD
 """
 
+import os
 import argparse
 import re
 import sys
 import pymysql
 from pymysql.cursors import DictCursor
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run SQL validation & analytics scripts.")
-    parser.add_argument("--host", default="localhost")
-    parser.add_argument("--port", type=int, default=3306)
-    parser.add_argument("--user", default="root")
-    parser.add_argument("--password", default="", help="MySQL root password")
-    parser.add_argument("--database", default="Google_Play")
+    parser.add_argument("--host", default=os.getenv("DB_HOST", "localhost"), help="MySQL database host")
+    parser.add_argument("--port", type=int, default=int(os.getenv("DB_PORT", "3306")), help="MySQL database port")
+    parser.add_argument("--user", default=os.getenv("DB_USER", "root"), help="MySQL database username")
+    parser.add_argument("--password", default=os.getenv("DB_PASSWORD", ""), help="MySQL database password")
+    parser.add_argument("--database", default=os.getenv("DB_NAME", "Google_Play"), help="MySQL database name")
     return parser.parse_args()
 
 
